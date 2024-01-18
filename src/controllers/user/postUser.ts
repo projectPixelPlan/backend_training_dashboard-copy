@@ -36,7 +36,7 @@ const token =req.headers.authorization
     }
     try {
          await User.create(user);
-         res.status(201).json({ success: true, message:"user added successfully" });
+        return res.status(201).json({ success: true, message:"user added successfully" });
       } catch (error) {
         
         console.error('Error creating user:', error);
@@ -45,7 +45,7 @@ const token =req.headers.authorization
 
 }catch (error) {
     console.error('Token verification failed:', error);
-    res.status(401).json({ valid: false, error: 'Invalid token' });
+   return  res.status(401).json({ valid: false, error: 'Invalid token' });
   }
 
 

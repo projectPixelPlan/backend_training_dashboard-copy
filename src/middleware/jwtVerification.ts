@@ -13,6 +13,8 @@ const jwtVerification= async (req:Request,res:Response,next:NextFunction)=>{
         }    
         let processedToken = token.split('Bearer ')[1];
 
+        
+
 
 
     }
