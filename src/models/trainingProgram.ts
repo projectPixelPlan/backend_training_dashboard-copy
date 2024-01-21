@@ -1,84 +1,87 @@
-import { TrainingPrograms } from "../types/modelTypes/trainingPrograms";
+import TrainingProgram  from "../types/modelTypes/trainingProgram";
 import sequelize from "../config/sequelize";
-import Sequelize, { DataTypes } from "sequelize";
+import { DataTypes } from "sequelize";
 
-TrainingPrograms.init({
-    Id: {
+TrainingProgram.init({
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
         unique: true,
     },
-    Title: {
+    title: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    TrainingTypeId: {
+    trainingTypeId: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    Description: {
+    description: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    TrainingMode: {
+    trainingMode: {
         type: DataTypes.ENUM('Online', 'Offline'),
         allowNull: false,
     },
-    StartDate: {
-        type: DataTypes.DATE,
+    startDate: {
+        type: DataTypes.DATEONLY,
         allowNull: false,
     },
-    EndDate: {
-        type: DataTypes.DATE,
+    endDate: {
+        type: DataTypes.DATEONLY,
         allowNull: false,
     },
-    Duration: {
+    duration: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    AvailableSeats: {
+    availableSeats: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    OccuranceType: {
+    occuranceType: {
         type: DataTypes.ENUM('Daily', 'Weekly', 'Monthly'),
         allowNull: false,
     },
-    OccuranceInterval: {
+    occuranceInterval: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    Status: {
+    status: {
         type: DataTypes.ENUM('Upcoming', 'Ongoing', 'Completed', 'Cancelled', 'Postponed'),
         allowNull: false,
+        defaultValue: 'Upcoming',
     },
-    CreatedBy: {
-        type: DataTypes.STRING,
+    createdBy: {
+        type: DataTypes.UUID,
         allowNull: true,
     },
-    IsActive: {
+    isActive: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true,
     },
     createdAt: {
         type: DataTypes.DATE,
-        allowNull: true,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        allowNull: false,
+        defaultValue: new Date(),
     },
     updatedAt: {
         type: DataTypes.DATE,
         allowNull: true,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: new Date(),
     },
 },
     {
         sequelize,
-        modelName: 'TrainingPrograms',
-        tableName: 'trainingPrograms',
+        modelName: 'trainingProgram',
+        tableName: 'trainingProgram',
+        underscored: true,
+        freezeTableName: true,
     }
 );
 
-export { TrainingPrograms };
+export default TrainingProgram ;
