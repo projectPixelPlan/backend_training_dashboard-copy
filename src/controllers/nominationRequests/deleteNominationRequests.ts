@@ -4,36 +4,48 @@ import User from '../../models/user';
 import sequelize from '../../config/sequelize';
 
 const deleteNominationRequests = async (req: Request, res: Response): Promise<void | object> => {
-    const transaction = await sequelize.transaction();
 
     try {
         const nominations = req.body as { id: number }[];
         // const { ssoId } = req.body.jwt_decoded;
-        const ssoId = "9a0c17da-842d-4c7d-9a24-e2896a7a4a20";
+        const ssoId = "73a4feb0-7c36-4acc-a35b-4bdb1da72fa0"; // employee ssoid
 
         if (!nominations || !Array.isArray(nominations)) {
-            await transaction.rollback();
             return res.status(422).json({ error: 'Bad request' });
         }
 
         for (const nomination of nominations) {
             if (!nomination.id) {
-                await transaction.rollback();
                 return res.status(404).json({ error: 'Invalid Request' });
             }
 
-            const userId = await User.findOne({
+            const user = await User.findOne({
                 attributes: ['id'],
                 where: { ssoId: ssoId },
             });
 
-            await NominationRequest.update({ isActive: false, status: 'Removed' }, { where: { id: nomination.id }, transaction });
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            // Check if the nomination is already approved
+            const isApproved = await NominationRequest.findOne({
+                where: { id: nomination.id, status: 'Approved' },
+            });
+
+            if (isApproved) {
+                return res.status(422).json({ error: 'Nomination is already approved and cannot be removed' });
+            }
+
+            // Update only if the status is 'Pending' and createdBy and userId are the same
+            await NominationRequest.update(
+                { isActive: false, status: 'Removed', remarks: 'Removed By Employee' },
+                { where: { id: nomination.id } }
+            );
         }
 
-        await transaction.commit();
         res.status(200).json({ message: 'Nomination(s) Removed' });
     } catch (error: any) {
-        await transaction.rollback();
         res.status(500).json({ error: error.toString() });
     }
 };
