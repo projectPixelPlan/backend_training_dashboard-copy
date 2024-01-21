@@ -13,8 +13,8 @@ const postNominationRequests = async (req: Request, res: Response): Promise<void
     }
    
     // const { ssoid } = req.body.jwt_decoded;
-    // const ssoId = "9a0c17da-842d-4c7d-9a24-e2896a7a4a20"; //employee ssoid
-    const ssoId = "9a0c17da-842d-4c7d-9a24-e2896a7a4a20"; //manager ssoid
+    const ssoId = "73a4feb0-7c36-4acc-a35b-4bdb1da72fa0"; //employee ssoid
+    // const ssoId = "9a0c17da-842d-4c7d-9a24-e2896a7a4a20"; //manager ssoid
 
     if (!ssoId) {
       return res.status(422).json({ error: "Invalid user data" });
